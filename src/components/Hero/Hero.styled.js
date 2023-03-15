@@ -17,6 +17,12 @@ export const HeroContainer = styled.div`
     &> button {
         margin: 32px auto;
     }
+
+    @media screen and (max-width:${({theme}) => theme.layout.tablet}){
+    
+        height: 500px;
+
+    }
 `
 
 export const TextContainer = styled.div`
@@ -27,6 +33,14 @@ export const TextContainer = styled.div`
         display: flex;
         flex-direction: column;
         gap: 21px;
+
+        
+        @media screen and (max-width:390px){
+    
+            width: 328px;
+            margin: 0 16px;
+
+        }
         
 
 &> h1 {
@@ -35,6 +49,19 @@ export const TextContainer = styled.div`
         font-size: 40px;
         line-height: 40px;
         margin-top: 164px;
+
+
+        @media screen and (max-width:${({theme}) => theme.layout.tablet}){
+    
+            margin-top: 89px;
+
+        }
+
+        @media screen and (max-width:${({theme}) => theme.layout.mobile}){
+    
+            margin-top: 40px;
+
+        }
     }
 
     &> p {

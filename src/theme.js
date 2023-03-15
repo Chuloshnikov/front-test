@@ -5,6 +5,7 @@ export const theme = {
       primaryBackgroundColor: '#E5E5E5',
       primaryBackgroundButton: '#F4E041',
       primaryBackgroundButtonHover: '#FFEF46',
+      inputTextColor: '#7E7E7E',
       thirdTextColor: '#BABABA',
       accentColor: '#F0AF22',
       accentHoverColor: '#8C6000',
@@ -54,9 +55,7 @@ export const theme = {
     layout: {
       loptop: '1024px',
       tablet: '768px',
-      mobile: '425px',
-      mediumMobile: '375px',
-      smallMobile: '320px',
+      mobile: '360px',
     },
 
     containerWidth: {
