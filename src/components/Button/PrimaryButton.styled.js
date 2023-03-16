@@ -9,6 +9,7 @@ background-color: ${({theme}) => theme.colors.primaryBackgroundButton};
     justify-content: center;
     border-radius: 80px;
     transition: all .3s ease 0s;
+    cursor: pointer;
     
 
     :hover {

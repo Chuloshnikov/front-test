@@ -28,7 +28,7 @@ const GetPanel = () => {
 
   return (
     <div>
-        <GetPanelContainer>
+        <GetPanelContainer id='users'>
             <h2>Working with GET request</h2>   
                 <GetPanelList>
                     {members.map((member) => (

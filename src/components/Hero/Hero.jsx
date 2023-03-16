@@ -14,7 +14,7 @@ const Hero = () => {
                 as the world of Front-End Development keeps evolving.
             </p>
         </TextContainer>
-        <PrimaryButton text="Sign Up"/>
+        <a href="#signUp"><PrimaryButton text="Sign Up"/></a>
     </HeroContainer>
   )
 }

@@ -2,57 +2,86 @@ import React, { useEffect, useState } from 'react';
 
 import { getPositions } from "../../Services/api";
 import { PostPanelContainer, StyledInput, FormWrapper, Label, InputCheckbox, InputUpload, SignUpButton } from "./PostPanel.styled";
-import { userSchema } from "../../PostPanelValidation/PostPanelValidation";
+import { schema } from "../../PostPanelValidation/PostPanelValidation";
+import * as yup from 'yup';
+import axios from 'axios';
 
 const PostPanel = () => {
     const [positions, setPositions] = useState([]);
-    const [form, setForm] = useState ({
-        name: "",
-        email: "",
-        phone: "",
-        position: "",
-        photo: null,
-    });
+    const [formData, setFormData] = useState({
+          name: '',
+          email: '',
+          phone: '',
+          position_id: '',
+          photo: null
+        });
+      const [errors, setErrors] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         getPositions().then(data => {
             setPositions(data.positions) 
         })
     }, []);
-    // console.log(positions)
-
-    const onHandleChange = e => {
-        const {name, value, type, files} = e.target;
-        setForm(prevState => ({
-            ...prevState, 
-            [name]: type === "file" ? files[0] : value
-        })) 
-    };
-    
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const formData = {
-            name: e.target[0].value,
-            email: e.target[1].value,
-            phone: e.target[2].value
+      
+        const onHandleChange = (e) => {
+          const { name, value, files } = e.target;
+          setFormData(prevState => ({
+            ...prevState,
+            [name]: name === 'photo' ? files[0] : value
+          }));
         };
-        // console.log(form)
-        
-        const isValid = await userSchema.isValid(formData);
-        console.log(isValid)
-
-        e.target.reset();
-    };
+      
+        const handleSubmit = async (e) => {
+          e.preventDefault();
+          try {
+            await schema.validate(formData, { abortEarly: false });
+            setIsSubmitting(true);
+            const url = 'https://frontend-test-assignment-api.abz.agency/api/v1/users';
+            const config = {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+                'Token': 'eyJpdiI6Im9mV1NTMlFZQTlJeWlLQ3liVks1MGc9PSIsInZhbHVlIjoiRTJBbUR4dHp1dWJ3ekQ4bG85WVZya3ZpRGlMQ0g5ZHk4M05UNUY4Rmd3eFM3czc2UDRBR0E4SDR5WXlVTG5DUDdSRTJTMU1KQ2lUQmVZYXZZOHJJUVE9PSIsIm1hYyI6ImE5YmNiODljZjMzMTdmMDc4NjEwN2RjZTVkNzBmMWI0ZDQyN2YzODI5YjQxMzE4MWY0MmY0ZTQ1OGY4NTkyNWQifQ==' // замініть на свій токен
+              }
+            };
+            const data = new FormData();
+            data.append('name', formData.name);
+            data.append('email', formData.email);
+            data.append('phone', formData.phone);
+            data.append('position_id', formData.position_id);
+            data.append('photo', formData.photo);
+            const response = await axios.post(url, data, config);
+            console.log(response.data);
+            if (response.data.success) {
+             console.log("Пройшло")
+            } else {
+              console.log("Не ніхуя")
+            }
+          } catch (err) {
+            if (err instanceof yup.ValidationError) {
+              const newErrors = {};
+              err.inner.forEach(error => {
+                newErrors[error.path] = error.message;
+              });
+              setErrors(newErrors);
+            } else {
+              console.error(err);
+            }
+          } finally {
+            setIsSubmitting(false);
+          }
+        };
+      
 
     return (
-        <PostPanelContainer>
+        <PostPanelContainer id='signUp'>
             <h2>Working with POST request</h2>     
             <FormWrapper onSubmit={handleSubmit}>
 
                 <StyledInput                
                     placeholder="Your name"
                     type="text" 
-                    value={form.name} 
+                    value={formData.name} 
                     name="name" 
                     onChange={onHandleChange}
                 />
@@ -60,7 +89,7 @@ const PostPanel = () => {
                 <StyledInput
                     placeholder="Email"
                     type="email" 
-                    value={form.email} 
+                    value={formData.email} 
                     name="email" 
                     onChange={onHandleChange}
                 />
@@ -68,7 +97,7 @@ const PostPanel = () => {
                 <StyledInput
                     placeholder="Phone"
                     type="tel" 
-                    value={form.phone} 
+                    value={formData.phone} 
                     name="phone" 
                     onChange={onHandleChange}
                 />
@@ -96,9 +125,10 @@ const PostPanel = () => {
                     name="photo"
                 />
                 
-                <SignUpButton type="submit"> Sign up </SignUpButton>
+                <SignUpButton type="submit" onClick={handleSubmit}> Sign up </SignUpButton>
             </FormWrapper>
         </PostPanelContainer>
     )
 };
+
 export default PostPanel;

@@ -13,6 +13,8 @@ export const HeroContainer = styled.div`
     background-repeat: no-repeat;
     width: 100%;
     height: 650px;
+    display: flex;
+    flex-direction: column;
 
     &> button {
         margin: 32px auto;
@@ -22,6 +24,11 @@ export const HeroContainer = styled.div`
     
         height: 500px;
 
+    }
+
+    &> a {
+        display: block;
+        margin: 0 auto;
     }
 `
 
@@ -69,6 +76,7 @@ export const TextContainer = styled.div`
         font-weight: 400;
         font-size: 16px;
         line-height: 26px;
+        margin-bottom: 50px;
     }
 
 `

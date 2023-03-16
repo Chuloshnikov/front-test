@@ -14,8 +14,8 @@ const Header = () => {
             </a>
         </LogoContainer>
         <ButtonsContainer>
-          <PrimaryButton text="Users"/>
-          <PrimaryButton text="Sign Up"/>
+          <a href="#users"><PrimaryButton text="Users" /></a>
+          <a href="#signUp"><PrimaryButton text="Sign Up"/></a>
         </ButtonsContainer>
       </HeaderContainer>
     </HeaderWrapper>
