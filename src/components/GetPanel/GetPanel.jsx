@@ -11,7 +11,6 @@ const GetPanel = () => {
     useEffect(() => {
         getTeamMembers(page).then(data => {
             const members = data.users;
-            console.log(data.users)
             const sortedMembers = members.sort(((a, b) => b.registration_timestamp - a.registration_timestamp))
 
             setMembers(prevState =>  {

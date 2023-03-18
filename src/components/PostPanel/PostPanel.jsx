@@ -53,9 +53,9 @@ const PostPanel = () => {
             const response = await axios.post(url, data, config);
             console.log(response.data);
             if (response.data.success) {
-             console.log("Пройшло")
+             console.log("Success")
             } else {
-              console.log("Не ніхуя")
+              console.log("Error")
             }
           } catch (err) {
             if (err instanceof yup.ValidationError) {
