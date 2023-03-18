@@ -95,7 +95,6 @@ const PostPanel = () => {
                 <StyledInput                
                     placeholder="Your name"
                     type="text" 
-                    value={formData.name} 
                     name="name" 
                     onChange={onHandleChange}
                 />
@@ -103,7 +102,6 @@ const PostPanel = () => {
                 <StyledInput
                     placeholder="Email"
                     type="email" 
-                    value={formData.email} 
                     name="email" 
                     onChange={onHandleChange}
                 />
@@ -111,7 +109,6 @@ const PostPanel = () => {
                 <StyledInput
                     placeholder="Phone"
                     type="tel" 
-                    value={formData.phone} 
                     name="phone" 
                     onChange={onHandleChange}
                 />
@@ -125,7 +122,6 @@ const PostPanel = () => {
                         <InputCheckbox 
                             onChange={onHandleChange} 
                             type="radio" 
-                            value={position.id} 
                             name="position"
                         />
                         {position.name}
