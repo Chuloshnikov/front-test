@@ -46,7 +46,6 @@ const PostPanel = () => {
       
         const handleSubmit = async (e) => {
           e.preventDefault();
-          e.target.reset();
           try {
             await validationSchema.validate(formData, { abortEarly: false });
             setIsSubmitting(true);
@@ -122,7 +121,7 @@ const PostPanel = () => {
                         <InputCheckbox 
                             onChange={onHandleChange} 
                             type="radio" 
-                            name="position"
+                            name="position_id"
                         />
                         {position.name}
                     </Label>
