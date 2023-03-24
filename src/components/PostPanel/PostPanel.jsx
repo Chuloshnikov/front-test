@@ -18,11 +18,8 @@ const PostPanel = () => {
           position_id: '',
           photo: null
         });
-        const [token, setToken] = useState("");
-
-    
-  
-      const [errors, setErrors] = useState({});
+    const [token, setToken] = useState("");
+    const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     useEffect(() => {
         getPositions().then(data => {
@@ -62,13 +59,14 @@ const PostPanel = () => {
         
             const tokenResponse = await getToken();
             const newToken = tokenResponse.token;
+            console.log(newToken)
             setToken(newToken);
         
             const url = 'https://frontend-test-assignment-api.abz.agency/api/v1/users';
             const config = {
               headers: {
                 'Content-Type': 'multipart/form-data',
-                'Token': token,
+                'Token': newToken,
                 
               }
             };
