@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
 import { getPositions } from "../../Services/api";
+import { getToken } from "../../Services/api";
 import { PostPanelContainer, StyledInput, FormWrapper, Label, InputCheckbox, InputUpload, SignUpButton } from "./PostPanel.styled";
 import { validationSchema } from "../../PostPanelValidation/PostPanelValidation";
 import * as yup from 'yup';
 import axios from 'axios';
+
+
 
 const PostPanel = () => {
     const [positions, setPositions] = useState([]);
@@ -15,6 +18,10 @@ const PostPanel = () => {
           position_id: '',
           photo: null
         });
+        const [token, setToken] = useState("");
+
+    
+  
       const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     useEffect(() => {
@@ -22,7 +29,6 @@ const PostPanel = () => {
             setPositions(data.positions) 
         })
     }, []);
-
 
         const resetForm = () => {
           setFormData({
@@ -42,18 +48,28 @@ const PostPanel = () => {
           }));
         };
 
+        useEffect(() => {
+          console.log(formData);
+        }, [formData]);
 
-      
         const handleSubmit = async (e) => {
           e.preventDefault();
+          console.log('handleSubmit called');
           try {
             await validationSchema.validate(formData, { abortEarly: false });
             setIsSubmitting(true);
+            console.log('formData:', formData);
+        
+            const tokenResponse = await getToken();
+            const newToken = tokenResponse.token;
+            setToken(newToken);
+        
             const url = 'https://frontend-test-assignment-api.abz.agency/api/v1/users';
             const config = {
               headers: {
                 'Content-Type': 'multipart/form-data',
-                'Token': 'eyJpdiI6Im9mV1NTMlFZQTlJeWlLQ3liVks1MGc9PSIsInZhbHVlIjoiRTJBbUR4dHp1dWJ3ekQ4bG85WVZya3ZpRGlMQ0g5ZHk4M05UNUY4Rmd3eFM3czc2UDRBR0E4SDR5WXlVTG5DUDdSRTJTMU1KQ2lUQmVZYXZZOHJJUVE9PSIsIm1hYyI6ImE5YmNiODljZjMzMTdmMDc4NjEwN2RjZTVkNzBmMWI0ZDQyN2YzODI5YjQxMzE4MWY0MmY0ZTQ1OGY4NTkyNWQifQ==' 
+                'Token': token,
+                
               }
             };
             const data = new FormData();
@@ -62,11 +78,12 @@ const PostPanel = () => {
             data.append('phone', formData.phone);
             data.append('position_id', formData.position_id);
             data.append('photo', formData.photo);
+            console.log(formData);
             const response = await axios.post(url, data, config);
-            console.log(response.data);
+        
             if (response.data.success) {
-             console.log("Success");
-             resetForm();
+              console.log("Success");
+              resetForm();
             } else {
               console.log("Error")
             }
@@ -85,7 +102,7 @@ const PostPanel = () => {
           }
         };
       
-
+        
     return (
         <PostPanelContainer id='signUp'>
             <h2>Working with POST request</h2>     
@@ -95,6 +112,7 @@ const PostPanel = () => {
                     placeholder="Your name"
                     type="text" 
                     name="name" 
+                    value={formData.name}
                     onChange={onHandleChange}
                 />
 
@@ -102,6 +120,7 @@ const PostPanel = () => {
                     placeholder="Email"
                     type="email" 
                     name="email" 
+                    value={formData.email}
                     onChange={onHandleChange}
                 />
 
@@ -109,6 +128,7 @@ const PostPanel = () => {
                     placeholder="Phone"
                     type="tel" 
                     name="phone" 
+                    value={formData.phone}
                     onChange={onHandleChange}
                 />
                 
@@ -122,6 +142,7 @@ const PostPanel = () => {
                             onChange={onHandleChange} 
                             type="radio" 
                             name="position_id"
+                            value={position.id}
                         />
                         {position.name}
                     </Label>
